@@ -1,0 +1,13 @@
+DXP Shutdown Commenced At 01:06:26 on 23.01.2026
+-------------------------------------------------------
+T+: 16         16         Closing Documents
+T+: 1375       1391       FinalizeSecurityMgr
+T+: 16         1407       FinalizeSecurityServerMgr
+T+: 0          1407       FinalizeNetworkConnector
+T+: 15         1422       FinalizeNetworkServerConnector
+T+: 0          1422       DestroySecurityMgr
+T+: 0          1422       DestroySecurityServerMgr
+T+: 16         1438       DestroyNetworkConnector
+T+: 0          1438       DestroyNetworkServerConnector
+T+: 0          1438       Shutting down thread manager
+T+: 16         1454       Application Finalized

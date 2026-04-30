@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Face Tracker Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Syne:wght@400;600;800&display=swap');
+
+  :root {
+    --bg:       #0a0c0f;
+    --surface:  #111318;
+    --border:   #1e2128;
+    --border2:  #2a2f3a;
+    --text:     #e2e4e9;
+    --muted:    #5a6070;
+    --green:    #00d084;
+    --green-dim:#003d26;
+    --blue:     #3b9eff;
+    --blue-dim: #0a2540;
+    --red:      #ff4d4d;
+    --red-dim:  #2a0a0a;
+    --amber:    #f5a623;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* scan-line overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,.08) 2px,
+      rgba(0,0,0,.08) 4px
+    );
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--green);
+  }
+  .logo span { color: var(--muted); font-weight: 400; }
+
+  .header-status {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    border: 1px solid var(--border2);
+    background: var(--surface);
+    transition: all .3s;
+  }
+  .pill .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: all .3s;
+  }
+  .pill.ok   { border-color: var(--green-dim); color: var(--green); }
+  .pill.ok .dot { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .pill.err  { border-color: var(--red-dim); color: var(--red); }
+  .pill.err .dot { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+  main {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    grid-template-rows: auto auto;
+    gap: 16px;
+    padding: 20px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ── Kamera ── */
+  #cam-wrap {
+    position: relative;
+    background: #000;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+  #cam-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cam-overlay {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    display: flex; gap: 8px;
+  }
+
+  /* ── Butonlar ── */
+  .btn {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn:hover { background: var(--border); }
+  .btn:active { transform: scale(.97); }
+  .btn.primary { border-color: var(--green-dim); color: var(--green); }
+  .btn.primary:hover { background: var(--green-dim); }
+  .btn.danger  { border-color: var(--red-dim); color: var(--red); }
+  .btn.danger:hover  { background: var(--red-dim); }
+
+  /* ── Toggle ── */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .toggle-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+  }
+  .toggle-label small {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 3px;
+    font-weight: 400;
+  }
+  .switch {
+    position: relative;
+    width: 40px; height: 22px;
+    cursor: pointer;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider-track {
+    position: absolute; inset: 0;
+    background: var(--border2);
+    border-radius: 22px;
+    transition: .3s;
+  }
+  .slider-track::before {
+    content: '';
+    position: absolute;
+    width: 16px; height: 16px;
+    left: 3px; top: 3px;
+    border-radius: 50%;
+    background: var(--muted);
+    transition: .3s;
+  }
+  .switch input:checked + .slider-track { background: var(--green-dim); border: 1px solid var(--green); }
+  .switch input:checked + .slider-track::before {
+    transform: translateX(18px);
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+  }
+
+  /* ── Metrik kartlar ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+  }
+  .metric {
+    background: var(--surface);
+    padding: 14px 16px;
+  }
+  .metric-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .metric-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+  .metric-val.hi { color: var(--red); }
+  .metric-val.ok { color: var(--green); }
+  .metric-unit {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ── Servo gauge ── */
+  .servo-section {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .servo-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .servo-label-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .servo-label-row span:last-child { color: var(--blue); }
+  .servo-bar-bg {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .servo-bar-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 3px;
+    transition: width .3s;
+    box-shadow: 0 0 8px var(--blue);
+  }
+
+  /* ── Latency chart ── */
+  .chart-wrap {
+    padding: 12px 16px 16px;
+    height: 160px;
+    position: relative;
+  }
+
+  /* ── Fotoğraf ── */
+  .snap-section {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  #snap-preview {
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid var(--border2);
+    display: none;
+  }
+  #snap-info {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .snap-btns { display: flex; gap: 8px; }
+
+  /* ── Face coords ── */
+  .coords-row {
+    padding: 10px 16px;
+    display: flex;
+    gap: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .coord-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .coord-item span { color: var(--green); font-weight: 700; }
+
+  /* ── Model seçici ── */
+  .model-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  .model-opt:hover { border-color: var(--blue-dim); background: rgba(59,158,255,0.04); }
+  .model-opt:has(input:checked) { border-color: var(--green-dim); background: rgba(0,208,132,0.06); }
+  .model-opt input[type=radio] { margin-top: 3px; accent-color: var(--green); }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+  .blink { animation: pulse 1.4s infinite; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">FACE_TRACKER <span>// edge–cloud v0.1</span></div>
+  <div class="header-status">
+    <div class="pill" id="pill-cloud"><div class="dot"></div><span id="cloud-txt">CLOUD: —</span></div>
+    <div class="pill" id="pill-face"><div class="dot"></div><span id="face-txt">FACE: —</span></div>
+    <div class="pill" id="pill-aes"><div class="dot"></div><span id="aes-txt">AES: —</span></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Sol: Kamera -->
+  <div style="display:flex; flex-direction:column; gap:16px;">
+
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Kamera Akışı</span>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <select id="cam-select" class="btn" style="padding:5px 10px; background:var(--surface); color:var(--text); font-size:11px;" onchange="switchSource()">
+            <option value="processed">USB Kamera (Yüz Takip)</option>
+            <option value="cam0">CSI Kamera (Canlı)</option>
+          </select>
+          <div class="coords-row" style="padding:0; border:none; gap:16px;">
+            <div class="coord-item">cx: <span id="cx">—</span></div>
+            <div class="coord-item">cy: <span id="cy">—</span></div>
+            <div class="coord-item">ex: <span id="ex">—</span></div>
+            <div class="coord-item">ey: <span id="ey">—</span></div>
+          </div>
+        </div>
+      </div>
+      <div id="cam-wrap">
+        <img id="cam-img" src="/video" alt="stream">
+        <div class="cam-overlay">
+          <button class="btn primary" onclick="takeSnap()">Fotoğraf Çek</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Latency chart -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-title">Gecikme Grafiği (son 30 ölçüm)</span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted);">ms</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="latChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sağ: Kontrol paneli -->
+  <div style="display:flex; flex-direction:column; gap:16px;">
+
+    <!-- Metrikler -->
+    <div class="card">
+      <div class="card-head"><span class="card-title">Latency</span></div>
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-label">Min</div>
+          <div class="metric-val ok" id="lat-min">—</div>
+          <div class="metric-unit">ms</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Max</div>
+          <div class="metric-val hi" id="lat-max">—</div>
+          <div class="metric-unit">ms</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Ortalama</div>
+          <div class="metric-val" id="lat-avg">—</div>
+          <div class="metric-unit">ms</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Jitter</div>
+          <div class="metric-val" id="lat-jitter">—</div>
+          <div class="metric-unit">ms</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Servo pozisyon -->
+    <div class="card">
+      <div class="card-head"><span class="card-title">Servo Pozisyon</span></div>
+      <div class="servo-section">
+        <div class="servo-row">
+          <div class="servo-label-row">
+            <span>PAN (yatay)</span>
+            <span id="pan-val">90°</span>
+          </div>
+          <div class="servo-bar-bg">
+            <div class="servo-bar-fill" id="pan-bar" style="width:50%"></div>
+          </div>
+        </div>
+        <div class="servo-row">
+          <div class="servo-label-row">
+            <span>TILT (dikey)</span>
+            <span id="tilt-val">90°</span>
+          </div>
+          <div class="servo-bar-bg">
+            <div class="servo-bar-fill" id="tilt-bar" style="width:50%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AES Toggle -->
+    <div class="card">
+      <div class="card-head"><span class="card-title">Güvenlik</span></div>
+      <div class="toggle-row">
+        <div class="toggle-label">
+          AES-256-GCM Şifreleme
+          <small>Payload seviyesinde şifreleme</small>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="aes-toggle" checked onchange="toggleAES()">
+          <span class="slider-track"></span>
+        </label>
+      </div>
+      <div class="toggle-row" style="border:none;">
+        <div class="toggle-label">
+          TLS Bağlantısı
+          <small>Taşıma katmanı (her zaman aktif)</small>
+        </div>
+        <div class="pill ok" style="font-size:10px; padding:4px 10px;">
+          <div class="dot"></div> ON
+        </div>
+      </div>
+    </div>
+
+    <!-- Model Seçimi -->
+    <div class="card">
+      <div class="card-head"><span class="card-title">Algılama Modeli</span></div>
+      <div style="padding:14px 16px;">
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <label class="model-opt" id="opt-yunet" onclick="setModel('yunet')">
+            <input type="radio" name="model" value="yunet" checked>
+            <div>
+              <span style="font-weight:700; color:var(--green);">YuNet (DNN)</span>
+              <span class="pill ok" style="font-size:9px; padding:2px 8px; margin-left:6px;"><div class="dot"></div>ÖNERİLEN</span>
+              <small style="display:block; color:var(--muted); font-size:10px; margin-top:2px;">~3-5x hızlı · Yüksek doğruluk · Profil + eğik yüz</small>
+            </div>
+          </label>
+          <label class="model-opt" id="opt-lbp" onclick="setModel('lbp')">
+            <input type="radio" name="model" value="lbp">
+            <div>
+              <span style="font-weight:600;">LBP Cascade</span>
+              <small style="display:block; color:var(--muted); font-size:10px; margin-top:2px;">~2-3x hızlı · Orta doğruluk · Sadece cephe</small>
+            </div>
+          </label>
+          <label class="model-opt" id="opt-haar" onclick="setModel('haar')">
+            <input type="radio" name="model" value="haar">
+            <div>
+              <span style="font-weight:600;">Haar Cascade</span>
+              <small style="display:block; color:var(--muted); font-size:10px; margin-top:2px;">Yavaş · Orta doğruluk · Sadece cephe</small>
+            </div>
+          </label>
+        </div>
+        <div id="model-status" style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-top:8px;"></div>
+      </div>
+    </div>
+
+    <!-- FPS Ayarı -->
+    <div class="card">
+      <div class="card-head"><span class="card-title">FPS Ayarı</span></div>
+      <div style="padding:14px 16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <span class="toggle-label">Hedef FPS</span>
+          <span id="fps-display" style="font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:700; color:var(--blue);">15</span>
+        </div>
+        <input type="range" id="fps-slider" min="1" max="30" value="15"
+          style="width:100%; accent-color:var(--blue); cursor:pointer;"
+          oninput="onFpsChange(this.value)" onchange="setFps(this.value)">
+        <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); margin-top:4px;">
+          <span>1</span><span>10</span><span>20</span><span>30</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fotoğraf -->
+    <div class="card">
+      <div class="card-head"><span class="card-title">Fotoğraf</span></div>
+      <div class="snap-section">
+        <img id="snap-preview" alt="snapshot">
+        <div id="snap-info">Henüz fotoğraf çekilmedi.</div>
+        <div class="snap-btns">
+          <button class="btn primary" style="flex:1" onclick="takeSnap()">Çek</button>
+          <button class="btn" id="dl-btn" style="flex:1" onclick="downloadSnap()" disabled>İndir</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+const IMG_W = 640, IMG_H = 480;
+
+// Chart.js latency grafiği
+const ctx = document.getElementById('latChart').getContext('2d');
+const latChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: Array(30).fill(''),
+    datasets: [{
+      data: Array(30).fill(null),
+      borderColor: '#3b9eff',
+      borderWidth: 1.5,
+      pointRadius: 0,
+      tension: 0.4,
+      fill: true,
+      backgroundColor: 'rgba(59,158,255,0.08)'
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { display: false },
+      y: {
+        min: 0,
+        grid: { color: 'rgba(255,255,255,0.04)' },
+        ticks: {
+          color: '#5a6070',
+          font: { family: 'JetBrains Mono', size: 10 }
+        }
+      }
+    },
+    animation: { duration: 200 }
+  }
+});
+
+function pw2pct(pw) {
+  return ((pw - 500) / 2000) * 100;
+}
+function pw2deg(pw) {
+  return Math.round(((pw - 500) / 2000) * 180);
+}
+
+// State polling
+async function pollState() {
+  try {
+    const r = await fetch('/state');
+    const s = await r.json();
+
+    // Latency metrikler
+    document.getElementById('lat-min').textContent    = s.lat_min;
+    document.getElementById('lat-max').textContent    = s.lat_max;
+    document.getElementById('lat-avg').textContent    = s.lat_avg;
+    document.getElementById('lat-jitter').textContent = s.lat_jitter;
+
+    // Servo
+    const panPw  = s.pan_pw  || 1500;
+    const tiltPw = s.tilt_pw || 1500;
+    document.getElementById('pan-val').textContent  = pw2deg(panPw)  + '°';
+    document.getElementById('tilt-val').textContent = pw2deg(tiltPw) + '°';
+    document.getElementById('pan-bar').style.width  = pw2pct(panPw)  + '%';
+    document.getElementById('tilt-bar').style.width = pw2pct(tiltPw) + '%';
+
+    // Yüz koordinatları
+    const cx = s.raw_cx || 0, cy = s.raw_cy || 0;
+    document.getElementById('cx').textContent = cx;
+    document.getElementById('cy').textContent = cy;
+    document.getElementById('ex').textContent = (cx - IMG_W/2 > 0 ? '+' : '') + (cx - IMG_W/2);
+    document.getElementById('ey').textContent = (cy - IMG_H/2 > 0 ? '+' : '') + (cy - IMG_H/2);
+
+    // Pill: yüz
+    const fp = document.getElementById('pill-face');
+    const ft = document.getElementById('face-txt');
+    if (s.face_found) {
+      fp.className = 'pill ok'; ft.textContent = 'FACE: LOCK';
+    } else {
+      fp.className = 'pill err'; ft.textContent = 'FACE: LOST';
+    }
+
+    // Pill: AES
+    const ap = document.getElementById('pill-aes');
+    const at = document.getElementById('aes-txt');
+    if (s.aes_active) {
+      ap.className = 'pill ok'; at.textContent = 'AES: ON';
+    } else {
+      ap.className = 'pill err'; at.textContent = 'AES: OFF';
+    }
+    document.getElementById('aes-toggle').checked = s.aes_active;
+
+    // Pill: cloud (simüle — gerçek bağlantıda güncellenir)
+    const cp = document.getElementById('pill-cloud');
+    cp.className = s.cloud_connected ? 'pill ok' : 'pill err';
+    document.getElementById('cloud-txt').textContent =
+      s.cloud_connected ? 'CLOUD: OK' : 'CLOUD: OFF';
+
+  } catch(e) {}
+}
+
+// Latency chart polling
+async function pollLatency() {
+  try {
+    const r = await fetch('/latencies');
+    const lats = await r.json();
+    const padded = Array(30).fill(null);
+    lats.forEach((v, i) => { padded[30 - lats.length + i] = v; });
+    latChart.data.datasets[0].data = padded;
+    latChart.update('none');
+  } catch(e) {}
+}
+
+// AES toggle
+async function toggleAES() {
+  await fetch('/toggle_aes', { method: 'POST' });
+}
+
+// Model secimi
+async function setModel(name) {
+  document.getElementById('model-status').textContent = 'Değiştiriliyor...';
+  const r = await fetch('/set_model', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({model: name})
+  });
+  const j = await r.json();
+  document.getElementById('model-status').textContent = 'Aktif: ' + j.model.toUpperCase();
+  // Radio butonunu güncelle
+  document.querySelector(`input[name=model][value=${name}]`).checked = true;
+}
+(async function initModel() {
+  try {
+    const r = await fetch('/get_model');
+    const j = await r.json();
+    const radio = document.querySelector(`input[name=model][value=${j.model}]`);
+    if (radio) radio.checked = true;
+    document.getElementById('model-status').textContent = 'Aktif: ' + j.model.toUpperCase();
+  } catch(e) {}
+})();
+
+// FPS kontrol
+function onFpsChange(val) {
+  document.getElementById('fps-display').textContent = val;
+}
+async function setFps(val) {
+  document.getElementById('fps-display').textContent = val;
+  await fetch('/set_fps', { method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({fps: parseInt(val)})
+  });
+}
+// Sayfa açılınca mevcut FPS'i oku
+(async function initFps() {
+  try {
+    const r = await fetch('/get_fps');
+    const j = await r.json();
+    document.getElementById('fps-slider').value = j.fps;
+    document.getElementById('fps-display').textContent = j.fps;
+  } catch(e) {}
+})();
+
+// Kamera kaynağı değiştir
+function switchSource() {
+  const sel = document.getElementById('cam-select').value;
+  const img = document.getElementById('cam-img');
+  if (sel === 'processed') {
+    img.src = '/video';
+  } else if (sel === 'cam0') {
+    img.src = '/live?cam=0&t=' + Date.now();
+  }
+}
+
+// Fotoğraf çek
+async function takeSnap() {
+  const r = await fetch('/snapshot', { method: 'POST' });
+  const j = await r.json();
+  if (j.ok) {
+    const ts = Date.now();
+    const img = document.getElementById('snap-preview');
+    img.src = '/download_snapshot?' + ts;
+    img.style.display = 'block';
+    document.getElementById('snap-info').textContent =
+      'Çekildi: ' + j.time + ' — ' + j.path;
+    document.getElementById('dl-btn').disabled = false;
+  }
+}
+
+function downloadSnap() {
+  window.location.href = '/download_snapshot';
+}
+
+// Polling başlat
+setInterval(pollState,   800);
+setInterval(pollLatency, 1200);
+pollState();
+pollLatency();
+</script>
+</body>
+</html>

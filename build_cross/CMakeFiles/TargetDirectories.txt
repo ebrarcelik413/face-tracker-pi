@@ -1,0 +1,3 @@
+/home/akif/face_tracker/build_cross/CMakeFiles/face_tracker.dir
+/home/akif/face_tracker/build_cross/CMakeFiles/edit_cache.dir
+/home/akif/face_tracker/build_cross/CMakeFiles/rebuild_cache.dir

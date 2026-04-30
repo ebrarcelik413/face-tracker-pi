@@ -1,0 +1,3 @@
+/home/pi/face_tracker/build/CMakeFiles/face_tracker.dir
+/home/pi/face_tracker/build/CMakeFiles/edit_cache.dir
+/home/pi/face_tracker/build/CMakeFiles/rebuild_cache.dir

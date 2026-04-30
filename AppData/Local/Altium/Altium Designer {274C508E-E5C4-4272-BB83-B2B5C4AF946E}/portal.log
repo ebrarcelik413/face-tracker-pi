@@ -1,0 +1,62 @@
+[7260] 2.05.2024 18:05:49: Server Time at Login:15:05:12
+[7260] 2.05.2024 18:05:49: Client Time at Login:18:05:49
+[7260] 2.05.2024 18:05:49: ExistingLicenseGuids: 6C3E8690-8B59-431C-860B-A20229047D5B
+[3600] 2.05.2024 18:05:49: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[3600] 2.05.2024 18:05:50: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[16456] 2.05.2024 18:05:52: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[16456] 2.05.2024 18:05:52: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[900] 9.10.2024 19:19:41: Server Time at Login:16:17:07
+[900] 9.10.2024 19:19:41: Client Time at Login:19:19:41
+[900] 9.10.2024 19:19:41: ExistingLicenseGuids: 6C3E8690-8B59-431C-860B-A20229047D5B
+[1468] 9.10.2024 19:19:41: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[1468] 9.10.2024 19:19:42: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[16312] 9.10.2024 19:19:45: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[16312] 9.10.2024 19:19:45: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[10356] 12.10.2024 17:13:26: Login Failure - UserName:ebrarcelikk413@gmail.com Portal Server Message Returned:
+[10356] 12.10.2024 17:13:35: Login Failure - UserName:ebrarcelikk413@gmail.com Portal Server Message Returned:
+[10356] 12.10.2024 17:13:46: Server Time at Login:16:17:07
+[10356] 12.10.2024 17:13:46: Client Time at Login:17:13:46
+[10356] 12.10.2024 17:13:46: ExistingLicenseGuids: 6C3E8690-8B59-431C-860B-A20229047D5B
+[20084] 12.10.2024 17:13:46: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[20084] 12.10.2024 17:13:46: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[20168] 12.10.2024 17:13:47: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[20168] 12.10.2024 17:13:47: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[12748] 25.12.2024 01:24:18: Server Time at Login:22:24:16
+[12748] 25.12.2024 01:24:18: Client Time at Login:01:24:18
+[12748] 25.12.2024 01:24:18: ExistingLicenseGuids: 6C3E8690-8B59-431C-860B-A20229047D5B
+[10516] 25.12.2024 01:24:18: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[10516] 25.12.2024 01:24:18: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[22740] 25.12.2024 01:24:18: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[22740] 25.12.2024 01:24:19: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[25688] 6.02.2025 17:37:33: Login Failure - UserName:ebrarcelikk413@gmail.com Portal Server Message Returned:
+[25688] 6.02.2025 17:37:44: Server Time at Login:14:37:46
+[25688] 6.02.2025 17:37:44: Client Time at Login:17:37:44
+[25688] 6.02.2025 17:37:44: ExistingLicenseGuids: 6C3E8690-8B59-431C-860B-A20229047D5B
+[27772] 6.02.2025 17:37:44: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[27772] 6.02.2025 17:37:45: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[22460] 6.02.2025 17:37:45: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[22460] 6.02.2025 17:37:46: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[16984] 7.02.2025 04:22:10: Server Time at Login:14:37:46
+[16984] 7.02.2025 04:22:10: Client Time at Login:04:22:10
+[16984] 7.02.2025 04:22:10: ExistingLicenseGuids: 6C3E8690-8B59-431C-860B-A20229047D5B
+[572] 7.02.2025 04:22:10: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[572] 7.02.2025 04:22:11: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[17512] 7.02.2025 04:22:11: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[17512] 7.02.2025 04:22:12: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[8792] 2.05.2025 01:18:20: Server Time at Login:22:18:17
+[8792] 2.05.2025 01:18:20: Client Time at Login:01:18:20
+[8792] 2.05.2025 01:18:20: ExistingLicenseGuids: 6C3E8690-8B59-431C-860B-A20229047D5B
+[4104] 2.05.2025 01:18:20: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[4104] 2.05.2025 01:18:20: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[18312] 2.05.2025 01:18:21: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[18312] 2.05.2025 01:18:22: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[17064] 10.10.2025 16:43:54: Login Failure - UserName:ebrarcelikk413@gmail.com Portal Server Message Returned:
+[13856] 13.10.2025 12:12:49: Login Failure - UserName:ebrarcelikk413@gmail.com Portal Server Message Returned:
+[13856] 13.10.2025 12:13:00: Login Failure - UserName:ebrarcelikk413@gmail.com Portal Server Message Returned:
+[13856] 13.10.2025 12:13:13: Server Time at Login:09:13:13
+[13856] 13.10.2025 12:13:13: Client Time at Login:12:13:13
+[13856] 13.10.2025 12:13:13: ExistingLicenseGuids: 6C3E8690-8B59-431C-860B-A20229047D5B
+[22552] 13.10.2025 12:13:13: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[22552] 13.10.2025 12:13:14: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}
+[20636] 13.10.2025 12:13:14: GetLIC_AvailableLicenses_ForContact Request - ProductLine: 09D0A56F-4AC4-4159-9D7F-CE64A7A29346
+[20636] 13.10.2025 12:13:15: GetLIC_AvailableLicenses_ForContact Response - Success: False; Group_1: {GUID: 5AC428C5-BD24-471A-AFFA-9C023195375B; Name: Group Administrators}

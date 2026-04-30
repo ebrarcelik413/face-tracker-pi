@@ -1,0 +1,76 @@
+DXP Startup Commenced At 01:02:31 on 23.01.2026
+-------------------------------------------------------
+T+: 16         16         Name thread for debugging
+T+: 0          16         Acquiring startup mutex
+T+: 15         31         Cleanup AD temp files
+T+: 0          31         Application.Initialize
+T+: 0          31         Before security initialize
+T+: 141        172        Before CreateClient
+T+: 1094       1266       Starting server WorkspaceManager
+T+: 1281       2547       Starting server WorkspaceManager
+T+: 15         2562       Server WorkspaceManager  started
+T+: 16         2578       Starting server WorkspaceManager
+T+: 16         2594       Server WorkspaceManager  started
+T+: 156        2750       Server WorkspaceManager  started
+T+: 16         2766       Starting server ADVSIM
+T+: 1687       4453       Server ADVSIM  started
+T+: 31         4484       Starting server Altimade
+T+: 9063       13547      Server Altimade  started
+T+: 15         13562      Starting server Altium.Edp.SupplyChain
+T+: 8844       22406      Server Altium.Edp.SupplyChain  started
+T+: 31         22437      Starting server Altium.PinsPanel
+T+: 110        22547      Server Altium.PinsPanel  started
+T+: 15         22562      Starting server AltiumPortalCache
+T+: 16         22578      Server AltiumPortalCache  started
+T+: 16         22594      Starting server CollaborateCompareMerge
+T+: 187        22781      Server CollaborateCompareMerge  started
+T+: 16         22797      Starting server Comments
+T+: 3953       26750      Server Comments  started
+T+: 16         26766      Starting server DesignReuse
+T+: 375        27141      Server DesignReuse  started
+T+: 15         27156      Starting server EDesignData
+T+: 656        27812      Starting server VaultExplorer
+T+: 2844       30656      Starting server Altium.Edp.PartSearch.Plugin
+T+: 2735       33391      Server Altium.Edp.PartSearch.Plugin  started
+T+: 15         33406      Server VaultExplorer  started
+T+: 203        33609      Server EDesignData  started
+T+: 32         33641      Starting server EDMSInterface
+T+: 187        33828      Server EDMSInterface  started
+T+: 16         33844      Starting server Engagement
+T+: 468        34312      Server Engagement  started
+T+: 16         34328      Starting server ExtensionManager
+T+: 781        35109      Server ExtensionManager  started
+T+: 32         35141      Starting server HelpAdvisor
+T+: 218        35359      Server HelpAdvisor  started
+T+: 16         35375      Starting server IntegratedLibrary
+T+: 484        35859      Server IntegratedLibrary  started
+T+: 32         35891      Starting server InteractiveProperties
+T+: 2375       38266      Server InteractiveProperties  started
+T+: 15         38281      Starting server Personalization
+T+: 172        38453      Server Personalization  started
+T+: 16         38469      Starting server ProductImprovementProgram
+T+: 875        39344      Server ProductImprovementProgram  started
+T+: 15         39359      Starting server Sch
+T+: 10141      49500      Server Sch  started
+T+: 16         49516      Starting server ScriptingSystem
+T+: 546        50062      Server ScriptingSystem  started
+T+: 16         50078      Starting server VariantManager
+T+: 859        50937      Server VariantManager  started
+T+: 32         50969      Starting server VersionControl
+T+: 1875       52844      Server VersionControl  started
+T+: 15         52859      Starting server WebAppHost
+T+: 516        53375      Server WebAppHost  started
+T+: 31         53406      Starting server Workflow
+T+: 2203       55609      Server Workflow  started
+T+: 6110       61719      Starting server PCB
+T+: 4172       65891      Starting server MechatronicAD
+T+: 921        66812      Server MechatronicAD  started
+T+: 16         66828      Server PCB  started
+T+: 9234       76062      Starting server LayerStackManager
+T+: 1579       77641      Server LayerStackManager  started
+T+: 10984      88625      Before Application initialize
+T+: 359        88984      Before showing main form
+T+: 422        89406      Execute actions from command line
+T+: 31         89437      Before Application.Run
+T+: 144094     233531     Starting server SIM
+T+: 735        234266     Server SIM  started
